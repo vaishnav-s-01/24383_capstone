@@ -24,7 +24,7 @@ public class ProductPage {
 	private By cartProductName = By.xpath("//td[@class='cart_description']/h4/a");
 	private By cartProductPrice = By.xpath("//td[@class='cart_price']/p");
 	private By cartProductQuantity = By.xpath("//td[@class='cart_quantity']/button");
-	private By proceedToCheckoutButton = By.xpath("//a[contains(text(),'Proceed To Checkout')]");
+	private By proceedToCheckoutButton = By.xpath("//a[@class='btn btn-default check_out']");
 	private By removeProductButton = By.xpath("//a[@class='cart_quantity_delete']");
 	private By placeOrderButton = By.xpath("//a[contains(text(),'Place Order')]");
 	private By orderConfirmationMessage = By.xpath("//h2[@data-qa='order-placed']");

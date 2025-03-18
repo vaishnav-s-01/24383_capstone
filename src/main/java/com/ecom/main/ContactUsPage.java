@@ -1,12 +1,8 @@
 package com.ecom.main;
 
 import java.time.Duration;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.JavascriptExecutor;
 
 public class ContactUsPage {
 
@@ -16,8 +12,8 @@ public class ContactUsPage {
     public ContactUsPage() {
         this.driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.manage().window().maximize();
-		driver.get("https://www.automationexercise.com");
+        driver.manage().window().maximize();
+        driver.get("https://www.automationexercise.com");
     }
 
     // Locators
@@ -28,7 +24,6 @@ public class ContactUsPage {
     private By messageField = By.xpath("//textarea[@data-qa='message']");
     private By submitButton = By.xpath("//input[@data-qa='submit-button']");
     private By successMessage = By.xpath("//div[contains(text(),'Success! Your details have been submitted successfully.')]");
-    private By errorMessage = By.xpath("//div[contains(text(),'Error')]");
 
     // Navigate to Contact Us page
     public void navigateToContactUsPage() {
@@ -41,27 +36,35 @@ public class ContactUsPage {
         driver.findElement(emailField).sendKeys(email);
         driver.findElement(subjectField).sendKeys(subject);
         driver.findElement(messageField).sendKeys(message);
-        
-        
     }
 
     // Submit the form using JavaScript Executor
     public void submitForm() {
         WebElement submitBtn = driver.findElement(submitButton);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitBtn);
-        driver.switchTo().alert().accept();
+        
     }
 
     // Verify success message
-    public boolean verifySuccessMessage(String message) {
-        WebElement successMsg = driver.findElement(successMessage);
-        return successMsg.isDisplayed();
+    public boolean verifySuccessMessage() {
+    	driver.switchTo().alert().accept();
+        try {
+            WebElement successMsg = driver.findElement(successMessage);
+            return successMsg.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
-    // Verify error message
-    public boolean verifyErrorMessage() {
-        WebElement errorMsg = driver.findElement(errorMessage);
-        return errorMsg.isDisplayed();
+    // Verify email error message using JavaScript validationMessage attribute
+    public String verifyEmailErrorMessage() {
+        WebElement emailFieldElement = driver.findElement(emailField);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return (String) js.executeScript("return arguments[0].validationMessage;", emailFieldElement);
+    }
+
+    // Close the browser
+    public void closeBrowser() {
+        driver.quit();
     }
 }
-

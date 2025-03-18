@@ -2,7 +2,6 @@ package com.ecom.StepDefinition;
 
 import io.cucumber.java.en.*;
 import org.testng.Assert;
-
 import com.ecom.main.ContactUsPage;
 
 public class ContactUsSteps {
@@ -22,17 +21,24 @@ public class ContactUsSteps {
 
     @Then("Success message {string} should be displayed")
     public void success_message_should_be_displayed(String message) {
-        Assert.assertTrue(contactUsPage.verifySuccessMessage(message), "Success message not displayed!");
+        Assert.assertTrue(contactUsPage.verifySuccessMessage(), "Success message not displayed!");
     }
 
-//    @When("User submits the form without filling required fields")
-//    public void user_submits_the_form_without_filling_required_fields() {
-//        contactUsPage.submitForm();
-//    }
+    @When("User submits the form without filling the email field")
+    public void user_submits_the_form_without_filling_the_email_field() {
+        contactUsPage.fillContactForm("Vaishnav", "", "Feedback", "This is a test message.");
+        contactUsPage.submitForm();
+    }
 
-//    @Then("Error message should be displayed")
-//    public void error_message_should_be_displayed() {
-//        Assert.assertTrue(contactUsPage.verifyErrorMessage(), "Error message not displayed!");
-//    }
+    @Then("Error message {string} should be displayed")
+    public void error_message_should_be_displayed(String expectedMessage) {
+        String actualMessage = contactUsPage.verifyEmailErrorMessage();
+        Assert.assertEquals(actualMessage, expectedMessage, "Error message mismatch!");
+    }
+    
+    @Then("Error message {string} should be displayed for {string}")
+    public void error_message_should_be_displayed_for(String expectedMessage, String string2) {
+    	  String actualMessage = contactUsPage.verifyEmailErrorMessage();
+          Assert.assertEquals(actualMessage, expectedMessage, "Error message mismatch!");
+    }
 }
-
