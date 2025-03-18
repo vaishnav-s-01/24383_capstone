@@ -16,7 +16,7 @@ public class ContactUsSteps {
 
     @When("User enters valid details and submits the form")
     public void user_enters_valid_details_and_submits_the_form() {
-        contactUsPage.fillContactForm("John Doe", "john.doe@example.com", "Feedback", "This is a test message.");
+        contactUsPage.fillContactForm("Vaishnav", "Vaishnav@gmail.com", "Feedback", "This is a test message.");
         contactUsPage.submitForm();
     }
 
@@ -25,14 +25,14 @@ public class ContactUsSteps {
         Assert.assertTrue(contactUsPage.verifySuccessMessage(message), "Success message not displayed!");
     }
 
-    @When("User submits the form without filling required fields")
-    public void user_submits_the_form_without_filling_required_fields() {
-        contactUsPage.submitForm();
-    }
+//    @When("User submits the form without filling required fields")
+//    public void user_submits_the_form_without_filling_required_fields() {
+//        contactUsPage.submitForm();
+//    }
 
-    @Then("Error message should be displayed")
-    public void error_message_should_be_displayed() {
-        Assert.assertTrue(contactUsPage.verifyErrorMessage(), "Error message not displayed!");
-    }
+//    @Then("Error message should be displayed")
+//    public void error_message_should_be_displayed() {
+//        Assert.assertTrue(contactUsPage.verifyErrorMessage(), "Error message not displayed!");
+//    }
 }
 

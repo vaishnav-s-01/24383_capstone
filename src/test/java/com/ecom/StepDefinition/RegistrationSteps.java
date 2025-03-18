@@ -1,9 +1,9 @@
 package com.ecom.StepDefinition;
 
-
 import com.ecom.main.RegistrationPage;
 import com.ecom.util.ExcelUtils;
 import io.cucumber.java.en.*;
+import static org.testng.Assert.assertEquals;
 
 public class RegistrationSteps {
 
@@ -11,19 +11,19 @@ public class RegistrationSteps {
 
     @Given("the user navigates to the registration page")
     public void userNavigatesToRegistrationPage() {
-
         registrationPage = new RegistrationPage();
         registrationPage.navigateToRegistrationPage();
     }
+
     @Given("enter {string} and {string}")
-    public void enter_and(String string, String string2) {
-    	registrationPage.enterInitialDetails(string, string2);
+    public void enter_and(String name, String email) {
+        registrationPage.enterInitialDetails(name, email);
     }
+
     @Given("clicks signup")
     public void clicks_signup() {
         registrationPage.clickSignupAndRedirect();
     }
-
 
     @When("the user enters registration details from Excel")
     public void userEntersDetailsFromExcel() {
@@ -45,7 +45,6 @@ public class RegistrationSteps {
         String mobile = ExcelUtils.getCellData(1, 16);
 
         registrationPage.enterUserDetails(title, password, day, month, year, firstName, lastName, company, address, address2, country, state, city, zipcode, mobile);
-
         ExcelUtils.closeWorkbook();
     }
 
@@ -56,8 +55,15 @@ public class RegistrationSteps {
 
     @Then("the user registration should be successful")
     public void verifyUserRegistrationSuccess() {
-        registrationPage.verifyRegistrationSuccess();
-        registrationPage.closeBrowser();
+        String actualMessage = registrationPage.getSuccessMessage();
+        assertEquals(actualMessage, "ACCOUNT CREATED!", "Registration success message mismatch.");
 
+        String intermediateMessage = registrationPage.getIntermediateMessage("Continue");
+        assertEquals(intermediateMessage, "Continue", "Intermediate message mismatch.");
+
+        String deleteMessage = registrationPage.deleteAccount();
+        assertEquals(deleteMessage, "ACCOUNT DELETED!", "Account deletion message mismatch.");
+
+        registrationPage.closeBrowser();
     }
 }

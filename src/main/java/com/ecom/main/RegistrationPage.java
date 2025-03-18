@@ -8,9 +8,8 @@ import org.openqa.selenium.support.ui.*;
 public class RegistrationPage {
     private WebDriver driver;
 
-
     public void navigateToRegistrationPage() {
-    	driver = new ChromeDriver();
+        driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().window().maximize();
         driver.get("https://www.automationexercise.com/login");
@@ -22,16 +21,17 @@ public class RegistrationPage {
     }
 
     public void clickSignupAndRedirect() {
-        driver.findElement(By.xpath("//*[@id='form']/div/div/div[3]/div/form/button")).click();
+        WebElement signupButton = driver.findElement(By.xpath("//*[@id='form']/div/div/div[3]/div/form/button"));
+        clickUsingJS(signupButton);
     }
 
     public void enterUserDetails(String title, String password, String day, String month, String year,
                                  String firstName, String lastName, String company, String address,
                                  String address2, String country, String state, String city, String zipcode, String mobile) {
         if (title.equalsIgnoreCase("mr")) {
-            driver.findElement(By.id("id_gender1")).click();
+            clickUsingJS(driver.findElement(By.id("id_gender1")));
         } else if (title.equalsIgnoreCase("mrs")) {
-            driver.findElement(By.id("id_gender2")).click();
+            clickUsingJS(driver.findElement(By.id("id_gender2")));
         }
 
         driver.findElement(By.id("password")).sendKeys(password);
@@ -58,28 +58,55 @@ public class RegistrationPage {
     }
 
     private void checkCheckbox(By locator) {
-        WebElement checkbox = driver.findElement(locator);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox);
-        if (!checkbox.isSelected()) {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkbox);
-        }
+        WebElement checkbox = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(locator));
+        clickUsingJS(checkbox);
+    }
+
+    private void clickUsingJS(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", element);
+        js.executeScript("arguments[0].click();", element);
     }
 
     public void submitForm() {
         WebElement createAccountBtn = driver.findElement(By.xpath("//button[contains(text(),'Create Account')]"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", createAccountBtn);
-        createAccountBtn.click();
+        clickUsingJS(createAccountBtn);
     }
 
-    public void verifyRegistrationSuccess() {
+    public String getSuccessMessage() {
         WebElement successMessage = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'Account Created!')]")));
-        if (successMessage.isDisplayed()) {
-            System.out.println("Registration successful: 'Account Created!' message is displayed.");
-        } else {
-            System.err.println("Registration failed: 'Account Created!' message is not displayed.");
-        }
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//b[contains(text(), 'Account Created!')]")));
+        return successMessage.getText();
     }
+
+    public String getIntermediateMessage(String buttonText) {
+        WebElement continueButton = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@data-qa='continue-button']")));
+        return continueButton.getText();
+    }
+
+    public String deleteAccount() {
+
+        WebElement continueButton = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-qa='continue-button']")));
+        clickUsingJS(continueButton);
+
+        WebElement deleteBtn = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Delete Account')]")));
+        clickUsingJS(deleteBtn);
+
+        WebElement confirmMessage = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//b[contains(text(), 'Account Deleted!')]")));
+        String deleteMessage = confirmMessage.getText();
+
+        WebElement finalContinueButton = new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-qa='continue-button']")));
+        clickUsingJS(finalContinueButton);
+
+        return deleteMessage;
+    }
+
 
     public void closeBrowser() {
         driver.quit();

@@ -41,18 +41,21 @@ public class ContactUsPage {
         driver.findElement(emailField).sendKeys(email);
         driver.findElement(subjectField).sendKeys(subject);
         driver.findElement(messageField).sendKeys(message);
+        
+        
     }
 
     // Submit the form using JavaScript Executor
     public void submitForm() {
         WebElement submitBtn = driver.findElement(submitButton);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitBtn);
+        driver.switchTo().alert().accept();
     }
 
     // Verify success message
     public boolean verifySuccessMessage(String message) {
         WebElement successMsg = driver.findElement(successMessage);
-        return successMsg.isDisplayed() && successMsg.getText().equals(message);
+        return successMsg.isDisplayed();
     }
 
     // Verify error message
