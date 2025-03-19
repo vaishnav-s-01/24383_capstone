@@ -7,7 +7,8 @@ import io.cucumber.testng.CucumberOptions;
     features = "src/test/resources/Features",
     glue = "com.ecom.StepDefinition",
     plugin = {"pretty", "html:target/cucumber-reports.html", "json:target/cucumber-reports/cucumber.json"},
-    monochrome = true
+    monochrome = true,
+    tags = "@registration"
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 }

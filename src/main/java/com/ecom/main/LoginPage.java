@@ -2,10 +2,9 @@ package com.ecom.main;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import java.time.Duration;
 
-import javax.sound.midi.VoiceStatus;
+
+
 
 public class LoginPage {
 	private WebDriver driver;
@@ -18,9 +17,8 @@ public class LoginPage {
 	private By logoutButton = By.xpath("//a[contains(text(),'Logout')]");
 
 	public void openLoginPage() {
-		driver = new ChromeDriver();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		driver.manage().window().maximize();
+		BasePage.initializeBrowser("chrome");
+		driver=BasePage.getDriver();
 		driver.get("https://www.automationexercise.com");
 
 	}
@@ -48,7 +46,7 @@ public class LoginPage {
 	}
 
 	public void closeBrowser() {
-		driver.quit();
+		BasePage.quitBrowser();
 	}
 
 	public boolean verifyErrorMessage() {
