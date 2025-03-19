@@ -17,10 +17,11 @@ public class SubscriptionPage  {
 
     // Navigate to Home Page
     public void navigateToHomePage() {
-    	 this.driver = new ChromeDriver();
-         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-         driver.manage().window().maximize();
-         driver.get("https://www.automationexercise.com");
+    	BasePage.initializeBrowser("chrome");
+		driver = BasePage.getDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.manage().window().maximize();
+		driver.get("https://www.automationexercise.com");
     }
 
     // Enter subscription email

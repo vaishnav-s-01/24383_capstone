@@ -3,26 +3,30 @@ package com.ecom.StepDefinition;
 import com.ecom.main.RegistrationPage;
 import com.ecom.util.ExcelUtils;
 import io.cucumber.java.en.*;
+import com.aventstack.extentreports.Status;
+import static com.ecom.StepDefinition.Hooks.test;
 import static org.testng.Assert.assertEquals;
 
 public class RegistrationSteps {
 
-    RegistrationPage registrationPage;
+    RegistrationPage registrationPage = new RegistrationPage();
 
     @Given("the user navigates to the registration page")
     public void userNavigatesToRegistrationPage() {
-        registrationPage = new RegistrationPage();
         registrationPage.navigateToRegistrationPage();
+        test.log(Status.INFO, "Navigated to registration page");
     }
 
-    @Given("enter {string} and {string}")
-    public void enter_and(String name, String email) {
+    @And("enter {string} and {string}")
+    public void enterNameAndEmail(String name, String email) {
         registrationPage.enterInitialDetails(name, email);
+        test.log(Status.INFO, "Entered Name: " + name + " and Email: " + email);
     }
 
-    @Given("clicks signup")
-    public void clicks_signup() {
+    @And("clicks signup")
+    public void clickSignup() {
         registrationPage.clickSignupAndRedirect();
+        test.log(Status.INFO, "Clicked on Signup button");
     }
 
     @When("the user enters registration details from Excel")
@@ -46,13 +50,17 @@ public class RegistrationSteps {
 
         registrationPage.enterUserDetails(title, password, day, month, year, firstName, lastName, company, address, address2, country, state, city, zipcode, mobile);
         ExcelUtils.closeWorkbook();
+        test.log(Status.INFO, "Entered registration details from Excel");
     }
+
 
     @And("submits the registration form")
-    public void submitsRegistrationForm() {
+    public void submitRegistrationForm() {
         registrationPage.submitForm();
+        test.log(Status.INFO, "Submitted the registration form");
     }
 
+    
     @Then("the user registration should be successful")
     public void verifyUserRegistrationSuccess() {
         String actualMessage = registrationPage.getSuccessMessage();
@@ -63,7 +71,9 @@ public class RegistrationSteps {
 
         String deleteMessage = registrationPage.deleteAccount();
         assertEquals(deleteMessage, "ACCOUNT DELETED!", "Account deletion message mismatch.");
-
+        test.log(Status.PASS, "Registration success message displayed: " + actualMessage);
         registrationPage.closeBrowser();
     }
 }
+
+

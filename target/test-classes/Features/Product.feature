@@ -6,7 +6,7 @@ Background:
     When User logs in with valid credentials "Vaishnav@gmail.com" and "Vaishnav"
     Then User should be logged in successfully
     When User navigates to the products page
-
+@remove
   Scenario: add to cart and checkout
     
     When User searches for a product "Blue Top"

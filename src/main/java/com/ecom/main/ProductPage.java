@@ -19,7 +19,6 @@ public class ProductPage {
 	private By searchButton = By.id("submit_search");
 	private By productName = By.xpath("//div[@class='productinfo text-center']/p");
 	private By addToCartButton = By.xpath("//a[@class='btn btn-default add-to-cart']");
-	private By continueShoppingButton = By.xpath("//button[contains(text(),'Continue Shopping')]");
 	private By viewCartButton = By.xpath("//a[contains(text(),'Cart')]");
 	private By cartProductName = By.xpath("//td[@class='cart_description']/h4/a");
 	private By cartProductPrice = By.xpath("//td[@class='cart_price']/p");
@@ -33,10 +32,11 @@ public class ProductPage {
 	
 	// Open Home Page
 	public String homepage() {
-	    driver = new ChromeDriver();
-	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-	    driver.manage().window().maximize();
-	    driver.get("https://www.automationexercise.com");
+		BasePage.initializeBrowser("chrome");
+		driver = BasePage.getDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.manage().window().maximize();
+		driver.get("https://www.automationexercise.com");
 	    String titleString = driver.getTitle();
 		return titleString;
 	}
@@ -79,11 +79,6 @@ public class ProductPage {
 	        // Click the "Add to Cart" button using JavaScript Executor
 	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCartBtn);
 	        System.out.println("Product added to cart successfully.");
-
-	        // Click the "Continue Shopping" button using JavaScript Executor
-	        WebElement continueShoppingBtn = driver.findElement(continueShoppingButton);
-	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", continueShoppingBtn);
-	        System.out.println("Continued shopping after adding the product.");
 	    } catch (NoSuchElementException e) {
 	        System.err.println("Error: Unable to find the required elements. " + e.getMessage());
 	    } catch (Exception e) {
@@ -113,6 +108,8 @@ public class ProductPage {
 
 	// Proceed to Checkout
 	public void proceedToCheckout() {
+		driver.findElement(By.xpath("//p[@class='text-center']/a")).click();
+
 		driver.findElement(proceedToCheckoutButton).click();
 	}
 
@@ -142,6 +139,7 @@ public class ProductPage {
 
 	// Remove Product from Cart
 	public void removeProductFromCart() {
+		driver.findElement(By.xpath("//p[@class='text-center']/a")).click();
 		driver.findElement(removeProductButton).click();
 	}
 
